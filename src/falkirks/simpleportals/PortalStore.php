@@ -59,7 +59,6 @@ class PortalStore implements Listener{
     }
     public function onPlayerMove(PlayerMoveEvent $event){
         //$event->getPlayer()->sendMessage("hey");
-
         $portal = $this->getPortalAtPoint(Position::fromObject($event->getPlayer()->getPosition()->round(), $event->getPlayer()->getLevel()));
         if($portal instanceof Portal){
             $portal->playerInside($event->getPlayer());

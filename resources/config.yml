@@ -1,0 +1,6 @@
+#  ╔═╗┬┌┬┐┌─┐┬  ┌─┐╔═╗┌─┐┬─┐┌┬┐┌─┐┬  ┌─┐
+#  ╚═╗││││├─┘│  ├┤ ╠═╝│ │├┬┘ │ ├─┤│  └─┐
+#  ╚═╝┴┴ ┴┴  ┴─┘└─┘╩  └─┘┴└─ ┴ ┴ ┴┴─┘└─┘
+portal-entry-throttle: 3
+  # Time (in seconds) in which a player can't go through
+  # a portal after using the portal.

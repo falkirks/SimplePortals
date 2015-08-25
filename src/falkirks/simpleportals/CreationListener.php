@@ -26,17 +26,19 @@ class CreationListener implements Listener{
         $plugin->getServer()->getPluginManager()->registerEvents($this, $this->plugin);
     }
     public function onPlayerInteract(PlayerInteractEvent $event){
-        if($event->getItem() instanceof FlintSteel){
-            if($event->getBlock() instanceof Obsidian || $event->getBlock() instanceof StainedClay) {
-                list($min, $max) = $this->getBounds($event->getBlock());
-                if($min !== $max){
-                    if(!isset($this->sessions[$event->getPlayer()->getName()])){
-                        $portal = new Portal($this->plugin, $min, $max, $event->getBlock()->getLevel(), "--IN-PROGRESS--" . $event->getPlayer()->getName());
-                        //$event->getPlayer()->getLevel()->setBlock($portal->getPos1(), new Diamond());
-                        //$event->getPlayer()->getLevel()->setBlock($portal->getPos2(), new Diamond());
-                        $event->getPlayer()->sendMessage("Portal generated. Enter a warp name to link the portal to:");
-                        $this->sessions[$event->getPlayer()->getName()] = $portal;
-                        $event->setCancelled();
+        if($event->getPlayer()->hasPermission("simpleportals.create")) {
+            if ($event->getItem() instanceof FlintSteel) {
+                if ($event->getBlock() instanceof Obsidian || $event->getBlock() instanceof StainedClay) {
+                    list($min, $max) = $this->getBounds($event->getBlock());
+                    if ($min !== $max) {
+                        if (!isset($this->sessions[$event->getPlayer()->getName()])) {
+                            $portal = new Portal($this->plugin, $min, $max, $event->getBlock()->getLevel(), "--IN-PROGRESS--" . $event->getPlayer()->getName());
+                            //$event->getPlayer()->getLevel()->setBlock($portal->getPos1(), new Diamond());
+                            //$event->getPlayer()->getLevel()->setBlock($portal->getPos2(), new Diamond());
+                            $event->getPlayer()->sendMessage("Portal generated. Enter a warp name to link the portal to:");
+                            $this->sessions[$event->getPlayer()->getName()] = $portal;
+                            $event->setCancelled();
+                        }
                     }
                 }
             }

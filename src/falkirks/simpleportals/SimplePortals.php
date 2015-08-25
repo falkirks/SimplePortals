@@ -9,7 +9,7 @@ class SimplePortals extends PluginBase{
     /** @var  PortalStore */
     private $portalStore;
     public function onEnable(){
-        $this->getLogger()->warning("SimplePortals is in development, mind the bugs, they can bite!");
+        $this->saveDefaultConfig();
         $this->portalStore = PortalStore::fromJSON();
         $this->creationListener = new CreationListener($this);
     }

@@ -9,7 +9,6 @@ use pocketmine\Player;
 use pocketmine\Server;
 
 class Portal{
-    const PORTAL_ENTRY_THROTTLE = 3;
     /** @var SimplePortals  */
     private $plugin;
     /** @var Vector3  */
@@ -41,21 +40,24 @@ class Portal{
         return $this->level;
     }
     public function playerInside(Player $player){
-        if(!isset($this->players[$player->getName()]) || $this->players[$player->getName()]+Portal::PORTAL_ENTRY_THROTTLE < time()) {
-            $this->players[$player->getName()] = time();
-            /** @var Warp $warp */
-            $warp = $this->getPlugin()->getSimpleWarp()->getWarpManager()[$this->name];
-            if($warp instanceof Warp) {
-                if ($warp->canUse($player)) {
-                    $warp->teleport($player);
-                    $player->sendMessage("Teleporting...");
-                } else {
-                    $player->sendMessage("You don't have permission to use this warp.");
+        if($player->hasPermission("simpleportals.use")) {
+            if (!isset($this->players[$player->getName()]) || $this->players[$player->getName()] + $this->getPlugin()->getConfig()->get("portal-entry-throttle") < time()) {
+                $this->players[$player->getName()] = time();
+                /** @var Warp $warp */
+                $warp = $this->getPlugin()->getSimpleWarp()->getWarpManager()[$this->name];
+                if ($warp instanceof Warp) {
+                    if ($warp->canUse($player)) {
+                        $warp->teleport($player);
+                        $player->sendMessage("Teleporting...");
+                    }
+                    else {
+                        $player->sendMessage("You don't have permission to use this warp.");
+                    }
                 }
-            }
-            else{
-                $player->sendMessage("This warp no longer exists, deleting portal.");
-                $this->getPlugin()->getPortalStore()->removePortal($this);
+                else {
+                    // Warp doesn't exist, delete the portal.
+                    $this->getPlugin()->getPortalStore()->removePortal($this);
+                }
             }
         }
     }
