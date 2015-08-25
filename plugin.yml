@@ -3,3 +3,4 @@ main: falkirks\simpleportals\SimplePortals
 author: Falkirks
 version: 0.0.1 
 api: [1.10.0]
+depend: ["SimpleWarp"]

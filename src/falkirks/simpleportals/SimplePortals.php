@@ -10,8 +10,7 @@ class SimplePortals extends PluginBase{
     private $portalStore;
     public function onEnable(){
         $this->getLogger()->warning("SimplePortals is in development, mind the bugs, they can bite!");
-        $this->portalStore = PortalStore::fromBinary();
-        var_dump($this->portalStore);
+        $this->portalStore = PortalStore::fromJSON();
         $this->creationListener = new CreationListener($this);
     }
     public function onDisable(){
@@ -29,6 +28,13 @@ class SimplePortals extends PluginBase{
      */
     public function getPortalStore(){
         return $this->portalStore;
+    }
+
+    /**
+     * @return \falkirks\simplewarp\SimpleWarp
+     */
+    public function getSimpleWarp(){
+        return $this->getServer()->getPluginManager()->getPlugin("SimpleWarp");
     }
 
 }
