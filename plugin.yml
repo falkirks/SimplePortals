@@ -1,5 +1,16 @@
 name: SimplePortals
 main: falkirks\simpleportals\SimplePortals
 author: Falkirks
-version: 0.0.1 
+version: 0.0.2
 api: [1.10.0]
+depend: ["SimpleWarp"]
+permissions:
+  simpleportals:
+    default: op
+    children:
+      simpleportals.create:
+        default: op
+        description: Create a new portal
+      simpleportals.use:
+        default: true
+        description: Use existing portals

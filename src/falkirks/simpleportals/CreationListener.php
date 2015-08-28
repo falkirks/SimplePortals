@@ -2,6 +2,7 @@
 namespace falkirks\simpleportals;
 
 use falkirks\simpleportals\destination\PortalNotSetDestination;
+use falkirks\simplewarp\Warp;
 use pocketmine\block\Block;
 use pocketmine\block\Diamond;
 use pocketmine\block\DiamondOre;
@@ -25,16 +26,19 @@ class CreationListener implements Listener{
         $plugin->getServer()->getPluginManager()->registerEvents($this, $this->plugin);
     }
     public function onPlayerInteract(PlayerInteractEvent $event){
-        if($event->getItem() instanceof FlintSteel){
-            if($event->getBlock() instanceof Obsidian || $event->getBlock() instanceof StainedClay) {
-                list($min, $max) = $this->getBounds($event->getBlock());
-                if($min !== $max){
-                    if(!isset($this->sessions[$event->getPlayer()->getName()])){
-                        $portal = new Portal($min, $max, $event->getBlock()->getLevel(), new PortalNotSetDestination());
-                        $event->getPlayer()->getLevel()->setBlock($portal->getPos1(), new Diamond());
-                        $event->getPlayer()->getLevel()->setBlock($portal->getPos2(), new Diamond());
-                        $event->getPlayer()->sendMessage("Portal generated. Corners are set to diamond. Please enter a name for this portal:");
-                        $this->sessions[$event->getPlayer()->getName()] = $portal;
+        if($event->getPlayer()->hasPermission("simpleportals.create")) {
+            if ($event->getItem() instanceof FlintSteel) {
+                if ($event->getBlock() instanceof Obsidian || $event->getBlock() instanceof StainedClay) {
+                    list($min, $max) = $this->getBounds($event->getBlock());
+                    if ($min !== $max) {
+                        if (!isset($this->sessions[$event->getPlayer()->getName()])) {
+                            $portal = new Portal($this->plugin, $min, $max, $event->getBlock()->getLevel(), "--IN-PROGRESS--" . $event->getPlayer()->getName());
+                            //$event->getPlayer()->getLevel()->setBlock($portal->getPos1(), new Diamond());
+                            //$event->getPlayer()->getLevel()->setBlock($portal->getPos2(), new Diamond());
+                            $event->getPlayer()->sendMessage("Portal generated. Enter a warp name to link the portal to:");
+                            $this->sessions[$event->getPlayer()->getName()] = $portal;
+                            $event->setCancelled();
+                        }
                     }
                 }
             }
@@ -42,12 +46,23 @@ class CreationListener implements Listener{
     }
     public function onPlayerChat(PlayerChatEvent $event){
         if(isset($this->sessions[$event->getPlayer()->getName()])){
-            $portal = $this->sessions[$event->getPlayer()->getName()];
-            $portal->setName($event->getMessage());
-            $this->plugin->getPortalStore()->addPortal($portal);
-            $event->getPlayer()->sendMessage("Portal created.");
             $event->setCancelled();
-            unset($this->sessions[$event->getPlayer()->getName()]);
+            $portal = $this->sessions[$event->getPlayer()->getName()];
+            /** @var Warp $warp */
+            $warp = $this->plugin->getSimpleWarp()->getWarpManager()[$event->getMessage()];
+            if($warp instanceof Warp) {
+                $portal->setName($event->getMessage());
+                $this->plugin->getPortalStore()->addPortal($portal);
+                $event->getPlayer()->sendMessage("Portal created.");
+                unset($this->sessions[$event->getPlayer()->getName()]);
+            }
+            elseif($event->getMessage() === "exit"){
+                $event->getPlayer()->sendMessage("Portal creation cancelled.");
+                unset($this->sessions[$event->getPlayer()->getName()]);
+            }
+            else{
+                $event->getPlayer()->sendMessage("There is no warp with that name, try again.");
+            }
         }
     }
     private function getBounds(Block $block){
