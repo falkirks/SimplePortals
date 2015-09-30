@@ -4,3 +4,6 @@
 portal-entry-throttle: 3
   # Time (in seconds) in which a player can't go through
   # a portal after using the portal.
+portal-fill-block: 90
+  # Block to fill portals with
+  # set to 90 for portal block

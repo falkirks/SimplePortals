@@ -2,6 +2,7 @@
 namespace falkirks\simpleportals;
 
 use falkirks\simplewarp\Warp;
+use pocketmine\block\Block;
 use pocketmine\level\Level;
 use pocketmine\level\Position;
 use pocketmine\math\Vector3;
@@ -31,8 +32,21 @@ class Portal{
         $this->entryPoint = new Position(($pos1->x + $pos2->x)/2, $this->pos1->y, ($pos1->z + $pos2->z)/2, $level);
         $this->name = $name;
         $this->players = [];
-    }
+        $this->fillPortal(...explode(":", $plugin->getConfig()->get('portal-fill-block')));
 
+    }
+    protected function fillPortal($id, $meta = 0){
+        for($x = $this->pos1->x; $x <= $this->pos2->x; $x++){
+            for($y = $this->pos1->y; $y <= $this->pos2->y; $y++){
+                for($z = $this->pos1->z; $z <= $this->pos2->z; $z++){
+                    if($this->level->getBlockIdAt($x, $y, $z) === 0) {
+                        $this->level->setBlockIdAt($x, $y, $z, $id);
+                        $this->level->setBlockDataAt($x, $y, $z, $meta);
+                    }
+                }
+            }
+        }
+    }
     /**
      * @return Level
      */
