@@ -4,6 +4,7 @@
 portal-entry-throttle: 3
   # Time (in seconds) in which a player can't go through
   # a portal after using the portal.
-portal-fill-block: 90
+portal-fill-block: 0
   # Block to fill portals with
   # set to 90 for portal block
+  # This is a BETA feature and will cause issues with removing portals.
