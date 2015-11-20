@@ -1,8 +1,8 @@
 name: SimplePortals
 main: falkirks\simpleportals\SimplePortals
 author: Falkirks
-version: 0.0.3
-api: [1.10.0]
+version: 0.0.4
+api: [1.13.0]
 depend: ["SimpleWarp"]
 permissions:
   simpleportals:
