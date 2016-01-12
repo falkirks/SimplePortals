@@ -66,7 +66,7 @@ class PortalStore implements Listener{
     }
     public function getPortalAtPoint(Position $point){
         foreach($this->portals as $portal){
-            if($point->getLevel()->getName() === $portal->getLevel()->getName()) {
+            if($point->getLevel()->getName() === $portal->getLevelName()) {
                 if ($portal->isInside($point)) {
                     return $portal;
                 }

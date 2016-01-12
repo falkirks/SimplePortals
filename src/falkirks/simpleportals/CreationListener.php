@@ -32,7 +32,7 @@ class CreationListener implements Listener{
                     list($min, $max) = $this->getBounds($event->getBlock());
                     if ($min !== $max) {
                         if (!isset($this->sessions[$event->getPlayer()->getName()])) {
-                            $portal = new Portal($this->plugin, $min, $max, $event->getBlock()->getLevel(), "--IN-PROGRESS--" . $event->getPlayer()->getName());
+                            $portal = new Portal($this->plugin, $min, $max, $event->getBlock()->getLevel()->getName(), "--IN-PROGRESS--" . $event->getPlayer()->getName());
                             //$event->getPlayer()->getLevel()->setBlock($portal->getPos1(), new Diamond());
                             //$event->getPlayer()->getLevel()->setBlock($portal->getPos2(), new Diamond());
                             $event->getPlayer()->sendMessage("Portal generated. Enter a warp name to link the portal to:");

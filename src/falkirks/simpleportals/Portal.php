@@ -16,20 +16,17 @@ class Portal{
     private $pos1;
     /** @var Vector3  */
     private $pos2;
-    /** @var Level  */
-    private $level;
-    /** @var Position  */
-    private $entryPoint;
+    /** @var string  */
+    private $levelName;
     /** @var string */
     private $name;
     /** @var  Player[] */
     protected $players;
-    public function __construct(SimplePortals $plugin, Vector3 $pos1, Vector3 $pos2, Level $level, $name){
+    public function __construct(SimplePortals $plugin, Vector3 $pos1, Vector3 $pos2, $levelName, $name){
         $this->plugin = $plugin;
-        $this->level = $level;
+        $this->levelName = $levelName;
         $this->pos1 = new Vector3(min($pos1->x, $pos2->x), min($pos1->y, $pos2->y), min($pos1->z, $pos2->z));
         $this->pos2 = new Vector3(max($pos1->x, $pos2->x), max($pos1->y, $pos2->y), max($pos1->z, $pos2->z));
-        $this->entryPoint = new Position(($pos1->x + $pos2->x)/2, $this->pos1->y, ($pos1->z + $pos2->z)/2, $level);
         $this->name = $name;
         $this->players = [];
         $this->fillPortal(...explode(":", $plugin->getConfig()->get('portal-fill-block')));
@@ -47,11 +44,15 @@ class Portal{
             }
         }
     }
+    public function getLevelName(){
+        return $this->levelName;
+    }
     /**
-     * @return Level
+     *
+     * @return Level || null
      */
     public function getLevel(){
-        return $this->level;
+        return $this->getPlugin()->getServer()->getLevelByName($this->levelName);
     }
     public function playerInside(Player $player){
         if($player->hasPermission("simpleportals.use")) {
@@ -75,8 +76,11 @@ class Portal{
             }
         }
     }
+    /*
+     * @deprecated
+     */
     public function getEntryPoint(){
-        return $this->entryPoint;
+        return new Position(($this->pos1->x + $this->pos2->x)/2, $this->pos1->y, ($this->pos1->z + $this->pos2->z)/2, $this->getLevel());
     }
     public function isInside(Vector3 $point){
         return ($point->x >= $this->pos1->x && $point->x <= $this->pos2->x) && ($point->y >= $this->pos1->y && $point->y <= $this->pos2->y) && ($point->z >= $this->pos1->z && $point->z <= $this->pos2->z);
@@ -133,7 +137,7 @@ class Portal{
         ];
     }
     public static function fromArray($array){
-        return new Portal(Server::getInstance()->getPluginManager()->getPlugin("SimplePortals"), new Vector3($array["pos1"]["x"], $array["pos1"]["y"], $array["pos1"]["z"]), new Vector3($array["pos2"]["x"], $array["pos2"]["y"], $array["pos2"]["z"]), Server::getInstance()->getLevelByName($array["level"]), $array["name"]);
+        return new Portal(Server::getInstance()->getPluginManager()->getPlugin("SimplePortals"), new Vector3($array["pos1"]["x"], $array["pos1"]["y"], $array["pos1"]["z"]), new Vector3($array["pos2"]["x"], $array["pos2"]["y"], $array["pos2"]["z"]), $array["level"], $array["name"]);
     }
 
 }
