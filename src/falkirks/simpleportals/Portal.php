@@ -33,16 +33,21 @@ class Portal{
 
     }
     protected function fillPortal($id, $meta = 0){
-        for($x = $this->pos1->x; $x <= $this->pos2->x; $x++){
-            for($y = $this->pos1->y; $y <= $this->pos2->y; $y++){
-                for($z = $this->pos1->z; $z <= $this->pos2->z; $z++){
-                    if($this->level->getBlockIdAt($x, $y, $z) === 0) {
-                        $this->level->setBlockIdAt($x, $y, $z, $id);
-                        $this->level->setBlockDataAt($x, $y, $z, $meta);
+        $level = $this->getLevel();
+        if($level instanceof Level) {
+            for ($x = $this->pos1->x; $x <= $this->pos2->x; $x++) {
+                for ($y = $this->pos1->y; $y <= $this->pos2->y; $y++) {
+                    for ($z = $this->pos1->z; $z <= $this->pos2->z; $z++) {
+                        if ($level->getBlockIdAt($x, $y, $z) === 0) {
+                            $level->setBlockIdAt($x, $y, $z, $id);
+                            $level->setBlockDataAt($x, $y, $z, $meta);
+                        }
                     }
                 }
             }
+            return true;
         }
+        return false;
     }
     public function getLevelName(){
         return $this->levelName;
