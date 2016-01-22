@@ -137,7 +137,7 @@ class Portal{
                 "y" => $this->pos2->y,
                 "z" => $this->pos2->z
             ],
-            "level" => $this->getLevel()->getName(),
+            "level" => $this->getLevelName(),
             "name" => $this->getName()
         ];
     }
