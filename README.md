@@ -1,6 +1,6 @@
 SimplePortals
 =============
-SimplePortals is a stupidly simple portal plugin. It depends on SimpleWarp.
+SimplePortals is a simple portal plugin that allows you to make Nether style portals. It depends on SimpleWarp.
 
 ### Creating a portal
 1. Build a portal
