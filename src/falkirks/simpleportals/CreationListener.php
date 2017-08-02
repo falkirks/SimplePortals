@@ -13,7 +13,7 @@ use pocketmine\event\player\PlayerChatEvent;
 use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\item\FlintSteel;
 use pocketmine\math\Vector3;
-use pocketmine\network\protocol\UpdateBlockPacket;
+use pocketmine\network\mcpe\protocol\UpdateBlockPacket;
 
 class CreationListener implements Listener{
     /** @var  SimplePortals */
